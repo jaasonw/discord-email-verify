@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "register": "node -r register.js"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "discord-interactions": "^3.2.0",
+    "email-validator": "^2.0.4",
     "next": "12.2.5",
+    "prisma": "^4.2.1",
     "raw-body": "^2.5.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
