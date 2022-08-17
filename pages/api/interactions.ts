@@ -1,171 +1,138 @@
 import {
-  InteractionResponseFlags,
   InteractionResponseType,
   InteractionType,
   verifyKey,
 } from "discord-interactions";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
+import { ephemeralMessageReply } from "../../lib/message";
+import {
+  DropdownBuilder,
+  DropdownItem,
+  ModalBuilder,
+  TextInputBuilder,
+} from "../../lib/modal";
 
 const REGISTER_COMMAND = {
   name: "register",
   description: "Get a registration link to register for the club",
 };
 
-type Data = {
-  type: InteractionResponseType;
-  data: any;
-};
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextRequest) {
   if (req.method === "POST") {
-    const signature = req.headers["x-signature-ed25519"] as string;
-    const timestamp = req.headers["x-signature-timestamp"] as string;
-    const rawBody = JSON.stringify(req.body);
+    const signature = req.headers.get("x-signature-ed25519") ?? "";
+    const timestamp = req.headers.get("x-signature-timestamp") ?? "";
+    const body = await req.clone().arrayBuffer();
+    console.log(body);
+    const rawBody = JSON.stringify(body);
     const isValidRequest = verifyKey(
-      rawBody,
+      body,
       signature,
       timestamp,
       process.env.DISCORD_TOKEN ?? ""
     );
     if (!isValidRequest) {
-      return res.status(401).end("Bad request signature");
+      console.error("Bad request signature");
+      return new Response("Bad request signature", { status: 401 });
     }
-    const message = req.body;
+    const message = JSON.parse(await req.text());
+    console.log(message);
     // ACK pings from Discord
     if (message.type === InteractionType.PING) {
       console.log("Handling Ping request");
-      return new Response(
-        JSON.stringify({
-          type: InteractionResponseType.PONG,
-          data: {},
-        }),
-        {
-          status: 200,
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
+      return send(200, {
+        type: InteractionResponseType.PONG,
+      });
     } else if (message.type == InteractionType.APPLICATION_COMMAND) {
       switch (message.data.name.toLowerCase()) {
         case REGISTER_COMMAND.name.toLowerCase():
           console.log("Handling register command");
-          // res.status(200).send();
-          return new Response(
-            JSON.stringify({
-              type: InteractionResponseType.APPLICATION_MODAL,
-              data: {
-                title: "Register for access to the server!",
-                custom_id: "registration_modal",
-                components: [
-                  {
-                    type: 1,
-                    components: [
-                      {
-                        type: 4,
-                        custom_id: "first_name",
-                        label: "First Name",
-                        style: 1,
-                        min_length: 1,
-                        max_length: 4000,
-                        placeholder: "frank",
-                        required: true,
-                      },
-                    ],
-                  },
-                  {
-                    type: 1,
-                    components: [
-                      {
-                        type: 4,
-                        custom_id: "last_name",
-                        label: "Last Name",
-                        style: 1,
-                        min_length: 1,
-                        max_length: 4000,
-                        placeholder: "Bot",
-                        required: true,
-                      },
-                    ],
-                  },
-                  {
-                    type: 1,
-                    components: [
-                      {
-                        type: 4,
-                        custom_id: "email",
-                        label: "CSUF Email",
-                        style: 1,
-                        min_length: 1,
-                        max_length: 4000,
-                        placeholder: "frankBot@csu.fullerton.edu",
-                        required: true,
-                      },
-                    ],
-                  },
-                  {
-                    type: 1,
-                    components: [
-                      {
-                        type: 4,
-                        custom_id: "pronouns",
-                        label: "Preferred Pronouns",
-                        style: 1,
-                        min_length: 1,
-                        max_length: 4000,
-                        placeholder: "They/Them",
-                        required: false,
-                      },
-                    ],
-                  },
-                ],
-              },
-            }),
-            {
-              status: 200,
-              headers: {
-                "content-type": "application/json",
-              },
-            }
+          return send(
+            200,
+            new ModalBuilder()
+              .setCustomId("registration_modal")
+              .setTitle("Register for access to the server!")
+              .addComponent(
+                new TextInputBuilder()
+                  .setCustomId("first_name")
+                  .setLabel("First Name")
+                  .setMinLength(2)
+                  .setMaxLength(32)
+                  .setPlaceholder("frank")
+                  .setRequired(true)
+              )
+              .addComponent(
+                new TextInputBuilder()
+                  .setCustomId("last_name")
+                  .setLabel("Last Name")
+                  .setMinLength(2)
+                  .setMaxLength(32)
+                  .setPlaceholder("Bot")
+                  .setRequired(true)
+              )
+              .addComponent(
+                new TextInputBuilder()
+                  .setCustomId("email")
+                  .setLabel("CSUF Email")
+                  .setMinLength(2)
+                  .setMaxLength(320)
+                  .setPlaceholder("frankBot@csu.fullerton.edu")
+                  .setRequired(true)
+              )
+              .addComponent(
+                new DropdownBuilder()
+                  .setCustomId("pronouns")
+                  .setPlaceholder("Preferred Pronouns")
+                  .setMinValue(0)
+                  .setMaxValue(1)
+                  .addOption(
+                    new DropdownItem().setLabel("He/Him").setValue("(He/Him)")
+                  )
+                  .addOption(
+                    new DropdownItem().setLabel("She/Her").setValue("(She/Her)")
+                  )
+                  .addOption(
+                    new DropdownItem()
+                      .setLabel("They/Them")
+                      .setValue("(They/Them)")
+                  )
+              )
           );
-          break;
       }
     } else if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
       // Handle modal responses
-      console.debug(message);
-      console.debug(message.data.components[0]);
+      console.info(message);
+      console.info(message.data.components[0]);
       switch (message.data.custom_id) {
         case "registration_modal":
           const firstName = message.data.components[0].components[0].value;
           const lastName = message.data.components[1].components[0].value;
           const email = message.data.components[2].components[0].value;
-          const pronouns = message.data.components[3].components[0].value;
-          console.debug(`First Name: ${firstName}`);
-          console.debug(`Last Name: ${lastName}`);
-          console.debug(`Email: ${email}`);
-          console.debug(`Pronouns: ${pronouns}`);
+          const pronouns = message.data.components[3].components[0].values[0];
+          console.info(`First Name: ${firstName}`);
+          console.info(`Last Name: ${lastName}`);
+          console.info(`Email: ${email}`);
+          console.info(`Pronouns: ${pronouns}`);
 
-          res.status(200).send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `
-                First name: ${firstName}
-                Last name: ${lastName}
-                Email: ${email}
-                Pronouns: ${pronouns}
-              `,
-              flags: InteractionResponseFlags.EPHEMERAL,
-            },
-          });
-          break;
+          return send(
+            200,
+            ephemeralMessageReply(
+              `Constructed Name: ${firstName} ${lastName} ${pronouns}`
+            )
+          );
       }
     }
   } else {
-    return res.status(405).end("Method not allowed");
+    return send(405, "Method not allowed");
   }
+}
+
+function send(statusCode: number, body: Object) {
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 }
 
 export const config = {
