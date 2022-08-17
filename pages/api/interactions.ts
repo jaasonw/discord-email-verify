@@ -1,10 +1,12 @@
+import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 import {
   InteractionResponseType,
   InteractionType,
   verifyKey,
 } from "discord-interactions";
 import { NextRequest } from "next/server";
-import { ephemeralMessageReply } from "../../lib/message";
+import { ephemeralMessageReply, loadingMessage } from "../../lib/message";
 import {
   DropdownBuilder,
   DropdownItem,
@@ -23,7 +25,6 @@ export default async function handler(req: NextRequest) {
     const timestamp = req.headers.get("x-signature-timestamp") ?? "";
     const body = await req.clone().arrayBuffer();
     console.log(body);
-    const rawBody = JSON.stringify(body);
     const isValidRequest = verifyKey(
       body,
       signature,
@@ -79,23 +80,32 @@ export default async function handler(req: NextRequest) {
                   .setRequired(true)
               )
               .addComponent(
-                new DropdownBuilder()
+                new TextInputBuilder()
                   .setCustomId("pronouns")
-                  .setPlaceholder("Preferred Pronouns")
-                  .setMinValue(0)
-                  .setMaxValue(1)
-                  .addOption(
-                    new DropdownItem().setLabel("He/Him").setValue("(He/Him)")
-                  )
-                  .addOption(
-                    new DropdownItem().setLabel("She/Her").setValue("(She/Her)")
-                  )
-                  .addOption(
-                    new DropdownItem()
-                      .setLabel("They/Them")
-                      .setValue("(They/Them)")
-                  )
+                  .setLabel("Preferred Pronouns")
+                  .setMinLength(2)
+                  .setMaxLength(10)
+                  .setPlaceholder("He/Him, She/Her, They/Them, etc")
+                  .setRequired(false)
               )
+            // .addComponent(
+            //   new DropdownBuilder()
+            //     .setCustomId("pronouns")
+            //     .setPlaceholder("Preferred Pronouns")
+            //     .setMinValue(0)
+            //     .setMaxValue(1)
+            //     .addOption(
+            //       new DropdownItem().setLabel("He/Him").setValue("(He/Him)")
+            //     )
+            //     .addOption(
+            //       new DropdownItem().setLabel("She/Her").setValue("(She/Her)")
+            //     )
+            //     .addOption(
+            //       new DropdownItem()
+            //         .setLabel("They/Them")
+            //         .setValue("(They/Them)")
+            //     )
+            // )
           );
       }
     } else if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
@@ -107,12 +117,47 @@ export default async function handler(req: NextRequest) {
           const firstName = message.data.components[0].components[0].value;
           const lastName = message.data.components[1].components[0].value;
           const email = message.data.components[2].components[0].value;
-          const pronouns = message.data.components[3].components[0].values[0];
+          const pronouns = message.data.components[3].components[0].value;
+          // const prisma = new PrismaClient();
           console.info(`First Name: ${firstName}`);
           console.info(`Last Name: ${lastName}`);
           console.info(`Email: ${email}`);
           console.info(`Pronouns: ${pronouns}`);
-
+          // await prisma.user.create({
+          //   data: {
+          //     id: message.user.id,
+          //     firstName: firstName,
+          //     lastName: lastName,
+          //     email: email,
+          //     discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+          //     pronouns: pronouns,
+          //   },
+          // });
+          // axios.post("/createUser", {
+          //   botToken: process.env.DISCORD_TOKEN,
+          //   interactionId: message.id,
+          //   interactionToken: message.token,
+          //   id: message.member.user.id,
+          //   firstName: firstName,
+          //   lastName: lastName,
+          //   email: email,
+          //   discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+          //   pronouns: pronouns,
+          // });
+          fetch(`/createUser`, {
+            method: "POST",
+            body: JSON.stringify({
+              botToken: process.env.DISCORD_TOKEN,
+              interactionId: message.id,
+              interactionToken: message.token,
+              id: message.member.user.id,
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+              pronouns: pronouns,
+            }),
+          });
           return send(
             200,
             ephemeralMessageReply(
