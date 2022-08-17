@@ -150,3 +150,7 @@ export default async function handler(
     return res.status(405).end("Method not allowed");
   }
 }
+
+export const config = {
+  runtime: "experimental-edge",
+};
