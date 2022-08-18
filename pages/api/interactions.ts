@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import axios from "axios";
+import * as EmailValidator from "email-validator";
 import {
   InteractionResponseType,
   InteractionType,
@@ -7,12 +6,7 @@ import {
 } from "discord-interactions";
 import { NextRequest } from "next/server";
 import { ephemeralMessageReply, loadingMessage } from "../../lib/message";
-import {
-  DropdownBuilder,
-  DropdownItem,
-  ModalBuilder,
-  TextInputBuilder,
-} from "../../lib/modal";
+import { ModalBuilder, TextInputBuilder } from "../../lib/modal";
 
 const REGISTER_COMMAND = {
   name: "register",
@@ -118,52 +112,30 @@ export default async function handler(req: NextRequest) {
           const lastName = message.data.components[1].components[0].value;
           const email = message.data.components[2].components[0].value;
           const pronouns = message.data.components[3].components[0].value;
-          // const prisma = new PrismaClient();
           console.info(`First Name: ${firstName}`);
           console.info(`Last Name: ${lastName}`);
           console.info(`Email: ${email}`);
           console.info(`Pronouns: ${pronouns}`);
-          // await prisma.user.create({
-          //   data: {
-          //     id: message.user.id,
-          //     firstName: firstName,
-          //     lastName: lastName,
-          //     email: email,
-          //     discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-          //     pronouns: pronouns,
-          //   },
-          // });
-          // axios.post("/createUser", {
-          //   botToken: process.env.DISCORD_TOKEN,
-          //   interactionId: message.id,
-          //   interactionToken: message.token,
-          //   id: message.member.user.id,
-          //   firstName: firstName,
-          //   lastName: lastName,
-          //   email: email,
-          //   discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-          //   pronouns: pronouns,
-          // });
-          fetch(`${process.env.URL}/api/createUser`, {
-            method: "POST",
-            body: JSON.stringify({
-              botToken: process.env.DISCORD_TOKEN,
-              interactionId: message.id,
-              interactionToken: message.token,
-              id: message.member.user.id,
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-              pronouns: pronouns,
-            }),
-          });
-          return send(
-            200,
-            ephemeralMessageReply(
-              `Constructed Name: ${firstName} ${lastName} ${pronouns}`
-            )
-          );
+
+          // const validEmail = EmailValidator.validate(email);
+          const validEmail = EmailValidator.validate(email);
+          if (validEmail && email.endsWith("fullerton.edu")) {
+            fetch(`${process.env.URL}/api/createUser`, {
+              method: "POST",
+              body: JSON.stringify({
+                botToken: process.env.DISCORD_TOKEN,
+                interactionId: message.id,
+                interactionToken: message.token,
+                id: message.member.user.id,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+                pronouns: pronouns,
+              }),
+            });
+            return send(200, loadingMessage());
+          }
       }
     }
   } else {

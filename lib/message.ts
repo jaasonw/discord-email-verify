@@ -13,11 +13,11 @@ export function ephemeralMessageReply(message: string) {
   };
 }
 
-export function loadingMessage(message: string) {
+export function loadingMessage() {
   return {
     type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
-      content: message,
+      content: "",
       flags: InteractionResponseFlags.EPHEMERAL,
     },
   };
