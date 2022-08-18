@@ -120,24 +120,21 @@ export default async function handler(req: NextRequest) {
           console.info(`URL: ${url}`);
 
           // const validEmail = EmailValidator.validate(email);
-          const validEmail = EmailValidator.validate(email);
-          if (validEmail && email.endsWith("fullerton.edu")) {
-            fetch(url, {
-              method: "POST",
-              body: JSON.stringify({
-                botToken: process.env.DISCORD_TOKEN,
-                interactionId: message.id,
-                interactionToken: message.token,
-                id: message.member.user.id,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-                pronouns: pronouns,
-              }),
-            });
-            return send(200, loadingMessage());
-          }
+          fetch(url, {
+            method: "POST",
+            body: JSON.stringify({
+              botToken: process.env.DISCORD_TOKEN,
+              interactionId: message.id,
+              interactionToken: message.token,
+              id: message.member.user.id,
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+              pronouns: pronouns,
+            }),
+          });
+          return send(200, loadingMessage());
       }
     }
   } else {
