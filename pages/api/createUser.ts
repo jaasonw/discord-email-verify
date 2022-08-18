@@ -104,7 +104,7 @@ export default async function handler(
   });
   console.log("User created");
   const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process DEBUG: ${verificationCode}`;
-  sendResponse(token, message);
+  await sendResponse(token, message);
 
   res.status(200).json({ status: "OK" });
 }
