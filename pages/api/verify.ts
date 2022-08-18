@@ -31,7 +31,7 @@ export default async function handler(
       },
       {
         headers: {
-          Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+          Authorization: `Bot ${process.env.BOT_TOKEN}`,
         },
       }
     );
