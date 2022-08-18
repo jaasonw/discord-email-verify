@@ -34,7 +34,7 @@ export default async function handler(
     let base64 = Buffer.from(
       JSON.stringify({ query: req.query, error: error })
     ).toString("base64");
-    res.redirect(`/error?code=${base64}`);
+    return res.redirect(`/error?code=${base64}`);
   }
-  res.redirect("/success");
+  return res.redirect("/success");
 }
