@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -29,7 +29,7 @@ export default async function handler(
     });
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query["verificationCode"]}`);
-    console.error(`Error: ${error}`);
+    console.error(`Error: ${JSON.stringify(error)}`);
     console.debug(`Request query: ${JSON.stringify(req.query)}`);
     let base64 = Buffer.from(
       JSON.stringify({ query: req.query, error: error })
