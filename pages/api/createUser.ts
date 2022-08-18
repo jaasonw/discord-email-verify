@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   const body = JSON.parse(req.body);
   console.log(body);
-  const url = `https://discord.com/api/v10/interactions/${body["interactionId"]}/${body["interactionToken"]}/messages/@original`;
+  const url = `https://discord.com/api/v10/webhooks/${body["interactionId"]}/${body["interactionToken"]}/messages/@original`;
   const prisma = new PrismaClient();
 
   await prisma.user.create({
