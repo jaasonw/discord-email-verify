@@ -23,5 +23,5 @@ export default async function handler(
     },
   });
   await axios.patch(url, ephemeralMessageReply("Created entry in db"));
-  res.status(200);
+  res.status(200).json({ status: "OK" });
 }
