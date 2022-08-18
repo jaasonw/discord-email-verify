@@ -144,7 +144,7 @@ export default async function handler(req: NextRequest) {
           //   discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
           //   pronouns: pronouns,
           // });
-          fetch(`/createUser`, {
+          fetch(`${process.env.URL}/api/createUser`, {
             method: "POST",
             body: JSON.stringify({
               botToken: process.env.DISCORD_TOKEN,
