@@ -34,6 +34,7 @@ export default async function handler(
   const token = body["interactionToken"];
 
   // Valid email check
+  console.debug("Checking email validity");
   const validEmail = EmailValidator.validate(body.email);
   if (!validEmail || !body.email.endsWith("fullerton.edu")) {
     const message = `Invalid CSUF email: ${email}`;
@@ -41,8 +42,10 @@ export default async function handler(
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
+  console.debug("Email valid");
 
   // Existing discord user check
+  console.debug("Checking discord ID exists");
   const userExists = await prisma.user.findFirst({
     where: {
       id: id,
@@ -54,8 +57,10 @@ export default async function handler(
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
+  console.debug("Discord ID valid");
 
   // Existing CSUF email check
+  console.debug("Checking CSUF email exists");
   const emailExists = await prisma.user.findFirst({
     where: {
       email: email,
@@ -68,8 +73,10 @@ export default async function handler(
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
+  console.debug("CSUF Email valid");
 
   // Profanity check
+  console.debug("Checking profanity");
   const fullName = `${firstName} ${lastName} ${pronouns}`;
   const filter = new Filter();
   if (filter.clean(fullName) != fullName) {
@@ -79,8 +86,10 @@ export default async function handler(
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
+  console.debug("No profanity");
 
   // Everything looks good now, go ahead and send the email
+  console.debug("Attempting to create user");
   const verificationCode = randomUUID();
   await prisma.user.create({
     data: {
@@ -93,6 +102,7 @@ export default async function handler(
       verificationCode: verificationCode,
     },
   });
+  console.debug("User created");
   const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process DEBUG: ${verificationCode}`;
   sendResponse(token, message);
 
