@@ -15,13 +15,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const body = JSON.parse(req.body);
-  console.log(body);
+  console.debug(body);
 
   // Check if this is a valid request from ourself first
   if (body["botToken"] != process.env.DISCORD_TOKEN)
     return res.status(401).json({ status: "Unauthorized" });
 
-  console.log("Handling user registration request");
+  console.info("Handling user registration request");
   const prisma = new PrismaClient();
 
   const id = body["id"].trim();
@@ -34,18 +34,18 @@ export default async function handler(
   const token = body["interactionToken"];
 
   // Valid email check
-  console.log("Checking email validity");
+  console.debug("Checking email validity");
   const validEmail = EmailValidator.validate(body.email);
   if (!validEmail || !body.email.endsWith("fullerton.edu")) {
     const message = `Invalid CSUF email: ${email}`;
-    console.log(message);
+    console.error(message);
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
-  console.log("Email valid");
+  console.debug("Email valid");
 
   // Existing discord user check
-  console.log("Checking discord ID exists");
+  console.debug("Checking discord ID exists");
   const userExists = await prisma.user.findFirst({
     where: {
       id: id,
@@ -53,14 +53,14 @@ export default async function handler(
   });
   if (userExists) {
     const message = `Discord user with ID: ${id} appears to already be registered, check your email for a verification link or contact an administrator if you believe this is a mistake`;
-    console.log(message);
+    console.error(message);
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
-  console.log("Discord ID valid");
+  console.debug("Discord ID valid");
 
   // Existing CSUF email check
-  console.log("Checking CSUF email exists");
+  console.debug("Checking CSUF email exists");
   const emailExists = await prisma.user.findFirst({
     where: {
       email: email,
@@ -68,28 +68,28 @@ export default async function handler(
   });
   if (emailExists) {
     const message = `Email: ${email} appears to be already registered, check your email for a verification link or contact an administrator if you believe this is a mistake`;
-    console.log(message);
-    console.log(`Email ${email} is currently mapped to ${emailExists.id}`);
+    console.error(message);
+    console.debug(`Email ${email} is currently mapped to ${emailExists.id}`);
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
-  console.log("CSUF Email valid");
+  console.debug("CSUF Email valid");
 
   // Profanity check
-  console.log("Checking profanity");
+  console.debug("Checking profanity");
   const fullName = `${firstName} ${lastName} ${pronouns}`;
   const filter = new Filter();
   if (filter.clean(fullName) != fullName) {
     const message = `Profanity isnt allowed in your name, contact an administrator if you believe this is a mistake`;
-    console.log(message);
-    console.log(`Profanity detected in: ${fullName}`);
+    console.error(message);
+    console.debug(`Profanity detected in: ${fullName}`);
     await sendResponse(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
-  console.log("No profanity");
+  console.debug("No profanity");
 
   // Everything looks good now, go ahead and send the email
-  console.log("Attempting to create user");
+  console.debug("Attempting to create user");
   const verificationCode = randomUUID();
   await prisma.user.create({
     data: {
@@ -102,9 +102,8 @@ export default async function handler(
       verificationCode: verificationCode,
     },
   });
-  console.log("User created");
+  console.debug("User created");
   const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process DEBUG: ${verificationCode}`;
   await sendResponse(token, message);
-
   res.status(200).json({ status: "OK" });
 }

@@ -30,12 +30,11 @@ export default async function handler(
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query["verificationCode"]}`);
     console.error(`Error: ${error}`);
-    console.debug(`Request query: ${req.query}`);
+    console.debug(`Request query: ${JSON.stringify(req.query)}`);
     let base64 = Buffer.from(
       JSON.stringify({ query: req.query, error: error })
     ).toString("base64");
     res.redirect(`/error?code=${base64}`);
   }
   res.redirect("/success");
-  res.status(200).json({ status: "OK" });
 }
