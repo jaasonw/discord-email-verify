@@ -108,6 +108,7 @@ export default async function handler(req: NextRequest) {
       console.info(message.data.components[0]);
       switch (message.data.custom_id) {
         case "registration_modal":
+          const url = `${process.env.URL}/api/createUser`;
           const firstName = message.data.components[0].components[0].value;
           const lastName = message.data.components[1].components[0].value;
           const email = message.data.components[2].components[0].value;
@@ -116,11 +117,12 @@ export default async function handler(req: NextRequest) {
           console.info(`Last Name: ${lastName}`);
           console.info(`Email: ${email}`);
           console.info(`Pronouns: ${pronouns}`);
+          console.info(`URL: ${url}`);
 
           // const validEmail = EmailValidator.validate(email);
           const validEmail = EmailValidator.validate(email);
           if (validEmail && email.endsWith("fullerton.edu")) {
-            fetch(`${process.env.URL}/api/createUser`, {
+            fetch(url, {
               method: "POST",
               body: JSON.stringify({
                 botToken: process.env.DISCORD_TOKEN,
