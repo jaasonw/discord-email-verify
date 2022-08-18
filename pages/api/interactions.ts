@@ -1,4 +1,3 @@
-import * as EmailValidator from "email-validator";
 import {
   InteractionResponseType,
   InteractionType,
