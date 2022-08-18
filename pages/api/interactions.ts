@@ -108,7 +108,7 @@ export default async function handler(req: NextRequest) {
       console.info(message.data.components[0]);
       switch (message.data.custom_id) {
         case "registration_modal":
-          const url = `https://${process.env.VERCEL_URL}/api/createUser`;
+          const url = `${process.env.VERCEL_URL}/api/createUser`;
           const firstName = message.data.components[0].components[0].value;
           const lastName = message.data.components[1].components[0].value;
           const email = message.data.components[2].components[0].value;

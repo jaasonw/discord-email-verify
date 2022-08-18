@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import axios, { AxiosError } from "axios";
 import { Client, GatewayIntentBits } from "discord.js";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -17,6 +16,7 @@ export default async function handler(
         verificationCode: code,
       },
     });
+    if (!user) throw "Invalid or expired token";
     await prisma.user.updateMany({
       where: {
         verificationCode: code,
@@ -25,24 +25,13 @@ export default async function handler(
         verificationCode: "verified",
       },
     });
-    discord.guilds.cache
-      .get(process.env.GUILD_ID ?? "")
-      ?.members.cache.get(user?.id ?? "")
-      ?.roles.add(process.env.VERIFICATION_ROLE ?? "");
-
-    // const url = `https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${user}`;
-    // await axios.patch(
-    //   url,
-    //   {
-    //     nick: `${user?.firstName} ${user?.lastName} (${user?.pronouns})`,
-    //     roles: [process.env.VERIFICATION_ROLE],
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bot ${process.env.BOT_TOKEN}`,
-    //     },
-    //   }
-    // );
+    const guild = await discord.guilds.fetch(process.env.GUILD_ID ?? "");
+    const role = await guild.roles.fetch(process.env.VERIFICATION_ROLE ?? "");
+    const member = await guild.members.fetch(user?.id ?? "");
+    if (role) await member.roles.add(role);
+    await member.setNickname(
+      `${user?.firstName} ${user?.lastName} (${user?.pronouns})`
+    );
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query["verificationCode"]}`);
     console.error(`Error: ${JSON.stringify(error)}`);
