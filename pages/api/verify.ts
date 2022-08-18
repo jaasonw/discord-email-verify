@@ -23,10 +23,18 @@ export default async function handler(
       },
     });
     const url = `https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${user}`;
-    await axios.patch(url, {
-      nick: `${user?.firstName} ${user?.lastName} (${user?.pronouns})`,
-      roles: [process.env.VERIFICATION_ROLE],
-    });
+    await axios.patch(
+      url,
+      {
+        nick: `${user?.firstName} ${user?.lastName} (${user?.pronouns})`,
+        roles: [process.env.VERIFICATION_ROLE],
+      },
+      {
+        headers: {
+          Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+        },
+      }
+    );
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query["verificationCode"]}`);
     console.error(`Error: ${JSON.stringify(error)}`);
