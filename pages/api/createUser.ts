@@ -22,6 +22,6 @@ export default async function handler(
       pronouns: body["pronouns"],
     },
   });
-  await axios.patch(url, ephemeralMessageReply("Created entry in db"));
+  await axios.patch(url, { content: "Created entry in db" });
   res.status(200).json({ status: "OK" });
 }
