@@ -1,3 +1,5 @@
+# acm-registration
+
 A Discord server registration service. Completely deployed on a serverless architecture. 
 
 ## Features
