@@ -103,7 +103,7 @@ export default async function handler(
     },
   });
   console.debug("User created");
-  const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process DEBUG: ${process.env.VERCEL_URL}/api/verify?verificationCode=${verificationCode}`;
+  const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process DEBUG: ${process.env.DEPLOYMENT_URL}/api/verify?verificationCode=${verificationCode}`;
   await sendResponse(token, message);
   res.status(200).json({ status: "OK" });
 }

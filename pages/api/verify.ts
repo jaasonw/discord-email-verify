@@ -9,6 +9,7 @@ export default async function handler(
   const prisma = new PrismaClient();
   const discord = new Client({ intents: [GatewayIntentBits.Guilds] });
   await discord.login(process.env.BOT_TOKEN);
+  discord.user?.setStatus("invisible");
   const code: string = (req.query["verificationCode"] as string) ?? "";
   try {
     const user = await prisma.user.findFirst({
@@ -40,6 +41,8 @@ export default async function handler(
       JSON.stringify({ query: req.query, error: error })
     ).toString("base64");
     return res.redirect(`/error?code=${base64}`);
+  } finally {
+    discord.destroy()
   }
   return res.redirect("/success");
 }
