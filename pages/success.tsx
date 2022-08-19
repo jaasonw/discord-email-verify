@@ -1,13 +1,17 @@
 import { NextPage } from "next";
+import {
+  BannerContent,
+  BannerImage,
+  BannerLayout,
+} from "../components/ResultBanner";
 
-const Home: NextPage = () => {
+const Success: NextPage = () => {
   return (
-    <>
-      <h1>Success! You are now registered!</h1>
-      Click <a href="https://acmcsuf.com/discord">here</a> to continue to the
-      server
-    </>
+    <BannerLayout>
+      <BannerImage source="/Happy Frank.png"/>
+      <BannerContent success={true} />
+    </BannerLayout>
   );
 };
 
-export default Home;
+export default Success;
