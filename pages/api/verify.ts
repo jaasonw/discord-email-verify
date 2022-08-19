@@ -6,7 +6,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.debug({ req });
   const prisma = new PrismaClient();
   const discord = new Client({ intents: [GatewayIntentBits.Guilds] });
   await discord.login(process.env.BOT_TOKEN);

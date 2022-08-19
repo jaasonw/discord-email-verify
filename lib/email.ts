@@ -38,7 +38,7 @@ export async function sendVerificationEmail(to: string, link: string) {
                 background-color: 2c91c6;
                 padding: 15px;
               "
-              href="${link}"
+              onclick="location.href='${link}'"
             >
               Verify your email
             </button>
