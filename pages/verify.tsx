@@ -19,7 +19,7 @@ const VerifyPage: NextPage = ({ user }: any) => {
           type="button"
           onClick={(e) => {
             e.preventDefault();
-            window.location.href = `${process.env.DEPLOYMENT_URL}/api/verify?verificationCode=${user.verificationCode}`;
+            window.location.href = `../api/verify?verificationCode=${user.verificationCode}`;
           }}
         >
           here
