@@ -6,6 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.debug({ req });
   const prisma = new PrismaClient();
   const discord = new Client({ intents: [GatewayIntentBits.Guilds] });
   await discord.login(process.env.BOT_TOKEN);
@@ -42,7 +43,7 @@ export default async function handler(
     ).toString("base64");
     return res.redirect(`/error?code=${base64}`);
   } finally {
-    discord.destroy()
+    discord.destroy();
   }
   return res.redirect("/success");
 }
