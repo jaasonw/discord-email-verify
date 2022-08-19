@@ -1,0 +1,10 @@
+[template.environment]
+DISCORD_TOKEN="Enter your Discord application's public key"
+APPLICATION_ID="Enter your Discord application ID"
+BOT_TOKEN="Enter your Discord bot token"
+DATABASE_URL="Enter your database url"
+GUILD_ID="Enter the ID of the server you plan to use"
+VERIFICATION_ROLE="Enter the ID of the role you want to register"
+DEPLOYMENT_URL="Enter the URL you plan to deploy to"
+EMAIL="Enter the SMTP email address you plan to use"
+EMAIL_PASSWORD="Enter the email's password"
