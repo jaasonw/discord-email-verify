@@ -17,12 +17,15 @@
     "discord.js": "^14.2.0",
     "email-validator": "^2.0.4",
     "next": "12.2.5",
+    "nodemailer": "^6.7.8",
     "raw-body": "^2.5.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/bad-words": "^3.0.1",
     "@types/node": "18.7.3",
+    "@types/nodemailer": "^6.4.5",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
     "eslint": "8.22.0",

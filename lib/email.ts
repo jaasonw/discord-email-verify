@@ -1,0 +1,55 @@
+import nodemailer from "nodemailer";
+
+export async function sendVerificationEmail(to: string, link: string) {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: process.env.EMAIL,
+    to: to,
+    subject: "ACM at CSUF Discord verification",
+    html: `
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td style="text-align: center">
+            <h1>Welcome to ACM at CSUF!</h1>
+            Click the link below to complete the registration process
+            <button
+              class="generated-text"
+              type="button"
+              style="
+                font-family: Arial, sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #ffffff;
+                border-width: 0px;
+                border-color: #ffffff;
+                border-style: solid;
+                border-radius: 12px;
+                background-color: 2c91c6;
+                padding: 20px;
+              "
+              href="${link}"
+            >
+              Verify your email
+            </button>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            If you're having trouble clicking the button, copy paste the following URL into your browser: ${link} 
+          </td>
+        </tr>
+      </table>
+    `,
+  });
+  console.debug("Message sent: %s", info.messageId);
+}
