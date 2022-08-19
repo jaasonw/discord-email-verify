@@ -15,11 +15,15 @@ const VerifyPage: NextPage = ({ user }: any) => {
       <h1>Hi {user.firstName}! Welcome to ACM at CSUF</h1>
       <div>
         Click{" "}
-        <a
-          href={`${process.env.DEPLOYMENT_URL}/api/verify?verificationCode=${user.verificationCode}`}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = `${process.env.DEPLOYMENT_URL}/api/verify?verificationCode=${user.verificationCode}`;
+          }}
         >
           here
-        </a>{" "}
+        </button>{" "}
         to continue to the server
       </div>
       <div>If this is not you, you may close this window</div>
