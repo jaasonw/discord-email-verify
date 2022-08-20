@@ -23,9 +23,7 @@ export async function sendVerificationEmail(to: string, link: string) {
             <div>Click the link below to complete the registration process</div>
             <br />
             <br />
-            <button
-              class="generated-text"
-              type="button"
+            <a
               style="
                 font-family: Arial, sans-serif;
                 font-size: 20px;
@@ -37,11 +35,12 @@ export async function sendVerificationEmail(to: string, link: string) {
                 border-radius: 12px;
                 background-color: 2c91c6;
                 padding: 15px;
+                text-decoration: none;
               "
-              onclick="location.href='${link}'"
+              href="${link}"
             >
               Verify your email
-            </button>
+            </a>
             <br />
             <br />
             <br />

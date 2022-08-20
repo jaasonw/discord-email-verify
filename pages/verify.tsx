@@ -36,7 +36,7 @@ const VerifyPage: NextPage = ({ user }: any) => {
   );
 };
 export async function getServerSideProps(context: NextPageContext) {
-  const code = (context.query["verificationCode"] as string) ?? "";
+  const code = (context.query["code"] as string) ?? "";
   const prisma = new PrismaClient();
   // const user = {};
   const user = await prisma.user.findFirst({
