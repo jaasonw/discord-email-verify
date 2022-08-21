@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { useResponsive } from "../Hooks/useResponsive";
 
 type layoutPtops = {
   children?: React.ReactNode;
@@ -9,8 +10,10 @@ type layoutPtops = {
 
 export const BannerLayout: React.FC<layoutPtops> = (props) => {
   const { children } = props;
+  const [isDesktop] = useResponsive()
+
   return (
-    <section className=" flex bg-[#3b4f62] p-4 rounded-xl justify-center items-center md:p-8">
+    <section className={`flex ${!isDesktop && 'flex-col'} bg-[#3b4f62] p-4 rounded-xl justify-center items-center md:p-8`}>
       {children}
     </section>
   );
