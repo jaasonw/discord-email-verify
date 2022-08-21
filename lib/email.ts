@@ -20,10 +20,10 @@ export async function sendVerificationEmail(to: string, link: string) {
         <tr>
           <td style="text-align: center">
             <h1>Welcome to ACM at CSUF!</h1>
-            Click the link below to complete the registration process
-            <button
-              class="generated-text"
-              type="button"
+            <div>Click the link below to complete the registration process</div>
+            <br />
+            <br />
+            <a
               style="
                 font-family: Arial, sans-serif;
                 font-size: 20px;
@@ -34,18 +34,20 @@ export async function sendVerificationEmail(to: string, link: string) {
                 border-style: solid;
                 border-radius: 12px;
                 background-color: 2c91c6;
-                padding: 20px;
+                padding: 15px;
+                text-decoration: none;
               "
               href="${link}"
             >
               Verify your email
-            </button>
+            </a>
             <br />
             <br />
             <br />
             <br />
             <br />
-            If you're having trouble clicking the button, copy paste the following URL into your browser: ${link} 
+            If you're having trouble clicking the button, copy paste the following URL
+            into your browser: <a href=${link}>${link}</a>
           </td>
         </tr>
       </table>

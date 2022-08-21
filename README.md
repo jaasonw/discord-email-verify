@@ -1,13 +1,14 @@
 # acm-registration
 
-A Discord server registration service. Completely deployed on a serverless architecture. 
+A Discord server registration service. Completely deployed on a serverless architecture.
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/jaasonw/acm-registration)
 
 ## Features
 
 ### Modern Discord Interactions
 
 ![image 2](https://user-images.githubusercontent.com/8981287/185510392-ddfa158c-a7d8-478b-bf58-6f5970358ec6.png)
-
 
 Slash Commands
 
@@ -19,9 +20,7 @@ Modals
 
 ![image 3](https://user-images.githubusercontent.com/8981287/185510418-7de94b94-f359-4083-9f4d-575cc965f595.png)
 
-
 ![image 4](https://user-images.githubusercontent.com/8981287/185510421-e8f54e95-7872-4c88-a2a1-45abedd2899f.png)
-
 
 Simply register with 1 command and we’ll generate a 1-click, single-use verification link. We’ll handle the rest, role assignment, nickname assignment, database storage
 

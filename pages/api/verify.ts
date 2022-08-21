@@ -42,7 +42,7 @@ export default async function handler(
     ).toString("base64");
     return res.redirect(`/error?code=${base64}`);
   } finally {
-    discord.destroy()
+    discord.destroy();
   }
   return res.redirect("/success");
 }

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "register": "node -r register.js"
+    "register": "python register_commands.py"
   },
   "dependencies": {
     "@prisma/client": "^4.2.1",

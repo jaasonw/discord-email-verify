@@ -105,8 +105,8 @@ export default async function handler(
   });
   console.debug("User created");
   const message = `I've sent an email to ${email} with a verification link. It doesn't expire but it can only be used once. Check your email to complete the verification process!`;
-  const link = `${process.env.DEPLOYMENT_URL}/api/verify?verificationCode=${verificationCode}`;
-  await sendVerificationEmail(email, link)
+  const link = `${process.env.DEPLOYMENT_URL}/verify?code=${verificationCode}`;
+  await sendVerificationEmail(email, link);
   await sendResponse(token, message);
   res.status(200).json({ status: "OK" });
 }
