@@ -8,8 +8,8 @@ import {
 const Success: NextPage = () => {
   return (
     <BannerLayout>
-      <BannerImage source="/Happy Frank.png"/>
-      <BannerContent success={true} />
+      <BannerImage source="/Happy Frank.svg"/>
+      <BannerContent success={true}  header="You are now registered!"/>
     </BannerLayout>
   );
 };

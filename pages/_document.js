@@ -8,7 +8,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html className="rbg-zinc-900 flex justify-center items-center h-screen overflow-x-hidden font-poppins mx-10">
+      <Html className="flex justify-center items-center h-screen overflow-x-hidden font-poppins mx-10">
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com"/>
