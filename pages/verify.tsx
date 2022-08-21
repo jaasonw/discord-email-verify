@@ -11,8 +11,8 @@ import {
 } from "../components/ResultBanner";
 import { useResponsive } from "../Hooks/useResponsive";
 
-const VerifyPage: NextPage = ({user}:any) => {
-  const [isDesktop] = useResponsive()
+const VerifyPage: NextPage = ({ user }: any) => {
+  const [isDesktop] = useResponsive();
   if (!user) {
     return (
       <BannerLayout>
@@ -46,7 +46,8 @@ const VerifyPage: NextPage = ({user}:any) => {
           alt="frank wave"
         />
         <h1 className="text-center my-[0.5rem] text-[1.5rem] font-bold  md:text-[2rem]">
-          {`Hi ${user.firsName} ! Welcome to ACM at`} <span className="text-[#2C91C6]"> CSUF </span> 
+          {`Hi ${user.firstName} ! Welcome to ACM at`}{" "}
+          <span className="text-[#2C91C6]"> CSUF </span>
         </h1>
         <p className="text-center">
           Click the button below to verify this is you
