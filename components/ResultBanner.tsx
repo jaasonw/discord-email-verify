@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useResponsive } from "../Hooks/useResponsive";
 
-type layoutPtops = {
+type layoutProps = {
   children?: React.ReactNode;
 };
 
-export const BannerLayout: React.FC<layoutPtops> = (props) => {
+export const BannerLayout: React.FC<layoutProps> = (props) => {
   const { children } = props;
   const [isDesktop] = useResponsive();
 
@@ -22,19 +22,19 @@ export const BannerLayout: React.FC<layoutPtops> = (props) => {
 };
 
 type imageProps = {
-  source: string;
+  src: string;
 };
 
 export const BannerImage: React.FC<imageProps> = (props) => {
-  const { source } = props;
+  const { src } = props;
   return (
     <div>
       <Image
-        src={source}
+        src={src}
         objectFit="cover"
         width={129}
         height={92}
-        alt={source}
+        alt={src}
       />
     </div>
   );
@@ -59,11 +59,10 @@ export const BannerContent: React.FC<contentProps> = (props) => {
           <BannerHeader header={header} success={success} />
           <div className="text-center">
             <p className="mb-[1rem] text-[1rem]">
-              Please contact admin by clicking the link below and ask in
+            Contact an administrator by clicking the link below and asking in
               <span className="font-bold text-[#aed5fa] ">
                 &nbsp; #register-help &nbsp;
               </span>
-              channel
             </p>
             <ErrorMessage />
           </div>

@@ -8,8 +8,8 @@ import {
 const Error: NextPage = () => {
   return (
     <BannerLayout>
-      <BannerImage source="/Sad Frank.svg"/>
-      <BannerContent success={false} header="Uh oh! Register Failed" />
+      <BannerImage src="/Sad Frank.svg"/>
+      <BannerContent success={false} header="Uh oh! Registration Failed" />
     </BannerLayout>
   );
 };

@@ -16,7 +16,7 @@ const VerifyPage: NextPage = ({user}:any) => {
   if (!user) {
     return (
       <BannerLayout>
-        <BannerImage source="/Sad Frank.png" />
+        <BannerImage src="/Sad Frank.png" />
         <section className="flex flex-col items-center">
           <BannerHeader header="Uh oh! something went wrong" success={false} />
           <p className="ml-4 text-center">
@@ -43,13 +43,13 @@ const VerifyPage: NextPage = ({user}:any) => {
           objectFit="cover"
           width={isDesktop ? 200 : 160}
           height={isDesktop ? 100 : 80}
-          alt="acm logo"
+          alt="frank wave"
         />
         <h1 className="text-center my-[0.5rem] text-[1.5rem] font-bold  md:text-[2rem]">
           {`Hi ${user.firsName} ! Welcome to ACM at`} <span className="text-[#2C91C6]"> CSUF </span> 
         </h1>
         <p className="text-center">
-          Click the button below to verify this is you{" "}
+          Click the button below to verify this is you
         </p>
         <button
           className="mt-[1rem] font-semibold px-[2rem] bg-[#292c2f] p-2 rounded-md hover:bg-[#3d4043] transition-all duration-300"
