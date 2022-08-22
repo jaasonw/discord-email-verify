@@ -1,8 +1,8 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 export async function sendVerificationEmail(to: string, link: string) {
   let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
@@ -14,7 +14,7 @@ export async function sendVerificationEmail(to: string, link: string) {
   let info = await transporter.sendMail({
     from: process.env.EMAIL,
     to: to,
-    subject: "ACM at CSUF Discord verification",
+    subject: 'ACM at CSUF Discord verification',
     html: `
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -53,5 +53,5 @@ export async function sendVerificationEmail(to: string, link: string) {
       </table>
     `,
   });
-  console.debug("Message sent: %s", info.messageId);
+  console.debug('Message sent: %s', info.messageId);
 }

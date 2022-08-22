@@ -1,16 +1,17 @@
-import { PrismaClient } from "@prisma/client";
-import { NextPage, NextPageContext } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useState } from "react";
+import { PrismaClient } from '@prisma/client';
+import { NextPage, NextPageContext } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useState } from 'react';
 import LoadingSpinner from "../components/LoadingSpinner";
+
 import {
   BannerButton,
   BannerHeader,
   BannerImage,
   BannerLayout,
-} from "../components/ResultBanner";
-import { useResponsive } from "../Hooks/useResponsive";
+} from '../components/ResultBanner';
+import { useResponsive } from '../Hooks/useResponsive';
 
 const VerifyPage: NextPage = ({user}:any) => {
   const [isClicked,setClick] = useState(false)
@@ -48,7 +49,7 @@ const VerifyPage: NextPage = ({user}:any) => {
           alt="frank wave"
         />
         <h1 className="text-center my-[0.5rem] text-[1.5rem] font-bold  md:text-[2rem]">
-          {`Hi ${user.firstName} ! Welcome to ACM at`}{" "}
+          {`Hi ${user.firstName} ! Welcome to ACM at`}{' '}
           <span className="text-[#2C91C6]"> CSUF </span>
         </h1>
         <p className="text-center">
@@ -71,7 +72,7 @@ const VerifyPage: NextPage = ({user}:any) => {
 };
 
 export async function getServerSideProps(context: NextPageContext) {
-  const code = (context.query["code"] as string) ?? "";
+  const code = (context.query['code'] as string) ?? '';
   const prisma = new PrismaClient();
   // const user = {};
   const user = await prisma.user.findFirst({
