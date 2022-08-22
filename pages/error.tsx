@@ -1,14 +1,14 @@
-import { NextPage } from "next";
+import { NextPage } from 'next';
 import {
   BannerContent,
   BannerImage,
   BannerLayout,
-} from "../components/ResultBanner";
+} from '../components/ResultBanner';
 
 const Error: NextPage = () => {
   return (
     <BannerLayout>
-      <BannerImage src="/Sad Frank.svg"/>
+      <BannerImage src="/Sad Frank.svg" />
       <BannerContent success={false} header="Uh oh! Registration Failed" />
     </BannerLayout>
   );

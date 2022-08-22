@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import { useResponsive } from "../Hooks/useResponsive";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useResponsive } from '../Hooks/useResponsive';
 
 type layoutProps = {
   children?: React.ReactNode;
@@ -14,7 +14,9 @@ export const BannerLayout: React.FC<layoutProps> = (props) => {
 
   return (
     <section
-      className={`flex ${!isDesktop && "flex-col"} bg-[#161b22] p-4 rounded-xl justify-center items-center md:p-8`}
+      className={`flex ${
+        !isDesktop && 'flex-col'
+      } bg-[#161b22] p-4 rounded-xl justify-center items-center md:p-8`}
     >
       {children}
     </section>
@@ -29,13 +31,7 @@ export const BannerImage: React.FC<imageProps> = (props) => {
   const { src } = props;
   return (
     <div>
-      <Image
-        src={src}
-        objectFit="cover"
-        width={129}
-        height={92}
-        alt={src}
-      />
+      <Image src={src} objectFit="cover" width={129} height={92} alt={src} />
     </div>
   );
 };
@@ -59,7 +55,7 @@ export const BannerContent: React.FC<contentProps> = (props) => {
           <BannerHeader header={header} success={success} />
           <div className="text-center">
             <p className="mb-[1rem] text-[1rem]">
-            Contact an administrator by clicking the link below and asking in
+              Contact an administrator by clicking the link below and asking in
               <span className="font-bold text-[#aed5fa] ">
                 &nbsp; #register-help &nbsp;
               </span>
@@ -72,7 +68,6 @@ export const BannerContent: React.FC<contentProps> = (props) => {
     </div>
   );
 };
-
 
 //Sub-components from BannerContent
 type headerProps = {
@@ -110,9 +105,7 @@ export const ErrorMessage: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <p className="text-[1.25rem]">Error Code</p>
-      <div className="my-4 w-[300px] overflow-x-scroll">
-        {query.code}
-      </div>
+      <div className="my-4 w-[300px] overflow-x-scroll">{query.code}</div>
     </div>
   );
 };
