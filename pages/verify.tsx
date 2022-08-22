@@ -19,7 +19,7 @@ const VerifyPage: NextPage = ({ user }: any) => {
   if (!user) {
     return (
       <BannerLayout>
-        <BannerImage src="/Sad Frank.png" />
+        <BannerImage src="/Sad Frank.svg" />
         <section className="flex flex-col items-center">
           <BannerHeader header="Uh oh! something went wrong" success={false} />
           <p className="ml-4 text-center">
