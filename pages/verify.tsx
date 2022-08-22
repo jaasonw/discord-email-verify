@@ -3,7 +3,7 @@ import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from '../components/LoadingSpinner';
 
 import {
   BannerButton,
@@ -13,8 +13,8 @@ import {
 } from '../components/ResultBanner';
 import { useResponsive } from '../Hooks/useResponsive';
 
-const VerifyPage: NextPage = ({user}:any) => {
-  const [isClicked,setClick] = useState(false)
+const VerifyPage: NextPage = ({ user }: any) => {
+  const [isClicked, setClick] = useState(false);
   const [isDesktop] = useResponsive();
   if (!user) {
     return (
@@ -60,11 +60,11 @@ const VerifyPage: NextPage = ({user}:any) => {
           type="button"
           onClick={(e) => {
             e.preventDefault();
-            setClick(()=>true);
+            setClick(() => true);
             window.location.href = `../api/verify?verificationCode=${user.verificationCode}`;
           }}
         >
-          {isClicked ? <LoadingSpinner/> : "Verify" }
+          {isClicked ? <LoadingSpinner /> : 'Verify'}
         </button>
       </section>
     </BannerLayout>
