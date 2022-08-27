@@ -1,7 +1,7 @@
 import {
   InteractionResponseFlags,
   InteractionResponseType,
-} from "discord-interactions";
+} from 'discord-interactions';
 
 export function ephemeralMessageReply(message: string) {
   return {
@@ -17,7 +17,7 @@ export function loadingMessage() {
   return {
     type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
-      content: "",
+      content: '',
       flags: InteractionResponseFlags.EPHEMERAL,
     },
   };
