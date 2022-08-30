@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as EmailValidator from 'email-validator';
@@ -23,7 +23,7 @@ export default async function handler(
     return res.status(401).json({ status: 'Unauthorized' });
 
   console.info('Handling user registration request');
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
 
   const id = body['id'].trim();
   const firstName = body['firstName'].trim();

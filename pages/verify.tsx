@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -73,7 +73,7 @@ const VerifyPage: NextPage = ({ user }: any) => {
 
 export async function getServerSideProps(context: NextPageContext) {
   const code = (context.query['code'] as string) ?? '';
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   // const user = {};
   const user = await prisma.user.findFirst({
     where: {

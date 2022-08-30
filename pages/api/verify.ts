@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const discord = new Client({ intents: [GatewayIntentBits.Guilds] });
   await discord.login(process.env.BOT_TOKEN);
   discord.user?.setStatus('invisible');
