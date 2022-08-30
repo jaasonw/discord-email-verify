@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --ignore-path .gitignore --list-different --write --plugin-search-dir=. .",
-    "register": "python register_commands.py"
+    "register": "node register_commands.js"
   },
   "dependencies": {
     "@prisma/client": "^4.2.1",
@@ -30,6 +30,7 @@
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
     "autoprefixer": "^10.4.8",
+    "dotenv": "^16.0.1",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
     "postcss": "^8.4.16",
