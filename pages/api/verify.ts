@@ -34,7 +34,9 @@ export default async function handler(
     const member = await guild.members.fetch(user?.id ?? '');
     if (role) await member.roles.add(role);
     await member.setNickname(
-      `${user?.firstName} ${user?.lastName} ${`(${user?.pronouns})`}`
+      `${user?.firstName} ${user?.lastName} ${
+        user?.pronouns ? `(${user?.pronouns})` : ''
+      }`
     );
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query['verificationCode']}`);
