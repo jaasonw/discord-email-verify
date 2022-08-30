@@ -1,4 +1,5 @@
 // import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 

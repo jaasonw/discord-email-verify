@@ -1,4 +1,5 @@
 // import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as EmailValidator from 'email-validator';
