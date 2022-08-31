@@ -2,21 +2,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useResponsive } from '../Hooks/useResponsive';
+import { useResponsive } from '../hooks/useResponsive';
 
 type layoutProps = {
   children?: React.ReactNode;
 };
 
 export const BannerLayout: React.FC<layoutProps> = (props) => {
-  const { children } = props;
+  const {children} = props;
   const [isDesktop] = useResponsive();
 
   return (
     <section
-      className={`flex ${
-        !isDesktop && 'flex-col'
-      } bg-[#161b22] p-4 rounded-xl justify-center items-center md:p-8`}
+      className={`flex ${!isDesktop && 'flex-col'} bg-acm-canvas p-4 rounded-xl justify-center items-center md:p-8`}
     >
       {children}
     </section>
@@ -28,7 +26,7 @@ type imageProps = {
 };
 
 export const BannerImage: React.FC<imageProps> = (props) => {
-  const { src } = props;
+  const {src} = props;
   return (
     <div>
       <Image src={src} objectFit="cover" width={129} height={92} alt={src} />
@@ -42,7 +40,7 @@ type contentProps = {
 };
 
 export const BannerContent: React.FC<contentProps> = (props) => {
-  const { success, header } = props;
+  const {success, header} = props;
   return (
     <div className="flex flex-col items-center md:ml-[2rem] text-center ml-[1rem]">
       {success ? (
@@ -56,7 +54,7 @@ export const BannerContent: React.FC<contentProps> = (props) => {
           <div className="text-center">
             <p className="mb-[1rem] text-[1rem]">
               Contact an administrator by clicking the link below and asking in
-              <span className="font-bold text-[#aed5fa] ">
+              <span className="font-bold text-acm-light-blue">
                 &nbsp; #register-help &nbsp;
               </span>
             </p>
@@ -76,7 +74,7 @@ type headerProps = {
 };
 
 export const BannerHeader: React.FC<headerProps> = (props) => {
-  const { header, success } = props;
+  const {header, success} = props;
   return (
     <>
       {success ? (
@@ -94,14 +92,14 @@ export const BannerHeader: React.FC<headerProps> = (props) => {
 
 export const BannerButton = () => {
   return (
-    <button className="mt-[1rem] bg-[#292c2f] p-2 rounded-md hover:bg-[#3d4043] transition-all duration-300">
+    <button className="mt-[1rem] bg-acm-gray p-2 rounded-md hover:bg-button-hover transition-all duration-300">
       <Link href="https://acmcsuf.com/discord">Continue to the server</Link>
     </button>
   );
 };
 
 export const ErrorMessage: React.FC = () => {
-  const { query } = useRouter();
+  const {query} = useRouter();
   return (
     <div className="flex flex-col justify-center items-center">
       <p className="text-[1.25rem]">Error Code</p>
