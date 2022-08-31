@@ -1,9 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from '../components/LoadingSpinner';
 
 import {
   BannerButton,
@@ -13,13 +14,13 @@ import {
 } from '../components/ResultBanner';
 import { useResponsive } from '../hooks/useResponsive';
 
-const VerifyPage: NextPage = ({user}:any) => {
-  const [isClicked,setClick] = useState(false)
+const VerifyPage: NextPage = ({ user }: any) => {
+  const [isClicked, setClick] = useState(false);
   const [isDesktop] = useResponsive();
   if (!user) {
     return (
       <BannerLayout>
-        <BannerImage src="/Sad Frank.png" />
+        <BannerImage src="/Sad Frank.svg" />
         <section className="flex flex-col items-center">
           <BannerHeader header="Uh oh! something went wrong" success={false} />
           <p className="ml-4 text-center">
@@ -60,11 +61,11 @@ const VerifyPage: NextPage = ({user}:any) => {
           type="button"
           onClick={(e) => {
             e.preventDefault();
-            setClick(()=>true);
+            setClick(() => true);
             window.location.href = `../api/verify?verificationCode=${user.verificationCode}`;
           }}
         >
-          {isClicked ? <LoadingSpinner/> : "Verify" }
+          {isClicked ? <LoadingSpinner /> : 'Verify'}
         </button>
       </section>
     </BannerLayout>
@@ -73,7 +74,8 @@ const VerifyPage: NextPage = ({user}:any) => {
 
 export async function getServerSideProps(context: NextPageContext) {
   const code = (context.query['code'] as string) ?? '';
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
+  // const user = {};
   const user = await prisma.user.findFirst({
     where: {
       verificationCode: code,

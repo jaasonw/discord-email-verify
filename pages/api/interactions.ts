@@ -77,7 +77,6 @@ export default async function handler(req: NextRequest) {
                   .setCustomId('pronouns')
                   .setLabel('Preferred Pronouns')
                   .setMinLength(2)
-                  .setMaxLength(10)
                   .setPlaceholder('He/Him, She/Her, They/Them, etc')
                   .setRequired(false)
               )

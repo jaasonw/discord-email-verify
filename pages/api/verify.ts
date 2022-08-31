@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -6,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const discord = new Client({ intents: [GatewayIntentBits.Guilds] });
   await discord.login(process.env.BOT_TOKEN);
   discord.user?.setStatus('invisible');
@@ -34,7 +35,9 @@ export default async function handler(
     const member = await guild.members.fetch(user?.id ?? '');
     if (role) await member.roles.add(role);
     await member.setNickname(
-      `${user?.firstName} ${user?.lastName} ${`(${user?.pronouns})`}`
+      `${user?.firstName} ${user?.lastName} ${
+        user?.pronouns ? `(${user?.pronouns})` : ''
+      }`
     );
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query['verificationCode']}`);
