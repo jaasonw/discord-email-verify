@@ -2,7 +2,7 @@
 import { prisma } from '../../lib/prisma';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
-import makeNickname from '../../lib/makeNickName';
+import makeNickname from '../../lib/makeNickname';
 
 export default async function handler(
   req: NextApiRequest,
