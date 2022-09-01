@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -11,7 +12,7 @@ import {
   BannerImage,
   BannerLayout,
 } from '../components/ResultBanner';
-import { useResponsive } from '../Hooks/useResponsive';
+import { useResponsive } from '../hooks/useResponsive';
 
 const VerifyPage: NextPage = ({ user }: any) => {
   const [isClicked, setClick] = useState(false);
@@ -49,14 +50,14 @@ const VerifyPage: NextPage = ({ user }: any) => {
           alt="frank wave"
         />
         <h1 className="text-center my-[0.5rem] text-[1.5rem] font-bold  md:text-[2rem]">
-          {`Hi ${user.firstName} ! Welcome to ACM at`}{' '}
-          <span className="text-[#2C91C6]"> CSUF </span>
+          {`Hi ${user.firstName} ! Welcome to ACM at`}
+          <span className="text-acm-blue"> CSUF </span>
         </h1>
         <p className="text-center">
           Click the button below to verify this is you
         </p>
         <button
-          className="mt-[1rem] font-semibold px-[2rem] bg-[#292c2f] p-2 rounded-md hover:bg-[#3d4043] transition-all duration-300"
+          className="mt-[1rem] font-semibold px-[2rem] bg-acm-gray p-2 rounded-md hover:bg-button-hover transition-all duration-300"
           type="button"
           onClick={(e) => {
             e.preventDefault();
@@ -73,14 +74,13 @@ const VerifyPage: NextPage = ({ user }: any) => {
 
 export async function getServerSideProps(context: NextPageContext) {
   const code = (context.query['code'] as string) ?? '';
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   // const user = {};
   const user = await prisma.user.findFirst({
     where: {
       verificationCode: code,
     },
   });
-  console.log(user);
   return {
     props: { user },
   };
