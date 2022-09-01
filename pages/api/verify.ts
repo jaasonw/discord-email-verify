@@ -2,7 +2,6 @@
 import { prisma } from '../../lib/prisma';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { NextApiRequest, NextApiResponse } from 'next';
-import makeNickname from '../../lib/makeNickname';
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,13 +33,12 @@ export default async function handler(
     const guild = await discord.guilds.fetch(process.env.GUILD_ID ?? '');
     const role = await guild.roles.fetch(process.env.VERIFICATION_ROLE ?? '');
     const member = await guild.members.fetch(user?.id ?? '');
-    // check if user already has role
-    if (role) {
-      if (member.roles.cache.some((role) => role.id == process.env.GUILD_ID))
-        await member.roles.add(role);
-    }
-    const nickName = makeNickname(user.firstName, user.lastName, user.pronouns);
-    await member.setNickname(nickName);
+    if (role) await member.roles.add(role);
+    await member.setNickname(
+      `${user?.firstName} ${user?.lastName} ${
+        user?.pronouns ? `(${user?.pronouns})` : ''
+      }`
+    );
   } catch (error) {
     console.error(`Failed to verify UUID: ${req.query['verificationCode']}`);
     console.error(`Error: ${JSON.stringify(error)}`);
