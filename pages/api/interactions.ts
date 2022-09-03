@@ -75,7 +75,7 @@ export default async function handler(req: NextRequest) {
               .addComponent(
                 new TextInputBuilder()
                   .setCustomId('pronouns')
-                  .setLabel('Preferred Pronouns')
+                  .setLabel('Preferred Pronouns (Optional)')
                   .setMinLength(2)
                   .setPlaceholder('He/Him, She/Her, They/Them, etc')
                   .setRequired(false)
