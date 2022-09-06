@@ -3,6 +3,7 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
+import { ButtonBuilder } from 'discord.js';
 import { NextRequest } from 'next/server';
 import { ephemeralMessageReply, loadingMessage } from '../../lib/message';
 import { ModalBuilder, TextInputBuilder } from '../../lib/modal';
@@ -10,6 +11,11 @@ import { ModalBuilder, TextInputBuilder } from '../../lib/modal';
 const REGISTER_COMMAND = {
   name: 'register',
   description: 'Get a registration link to register for the club',
+};
+
+const CONFIGURE_COMMAND = {
+  name: 'configure',
+  description: 'Set bot channel',
 };
 
 export default async function handler(req: NextRequest) {
@@ -36,7 +42,9 @@ export default async function handler(req: NextRequest) {
       return send(200, {
         type: InteractionResponseType.PONG,
       });
-    } else if (message.type == InteractionType.APPLICATION_COMMAND) {
+    }
+    
+    if (message.type == InteractionType.APPLICATION_COMMAND) {
       switch (message.data.name.toLowerCase()) {
         case REGISTER_COMMAND.name.toLowerCase():
           console.log('Handling register command');
@@ -81,45 +89,53 @@ export default async function handler(req: NextRequest) {
                   .setRequired(false)
               )
           );
-      }
-    } else if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
-      // Handle modal responses
-      console.info(message);
-      console.info(message.data.components[0]);
-      switch (message.data.custom_id) {
-        case 'registration_modal':
-          const url = `${process.env.DEPLOYMENT_URL}/api/createUser`;
-          const firstName = message.data.components[0].components[0].value;
-          const lastName = message.data.components[1].components[0].value;
-          const email = message.data.components[2].components[0].value;
-          const pronouns = message.data.components[3].components[0].value;
-          console.info(`First Name: ${firstName}`);
-          console.info(`Last Name: ${lastName}`);
-          console.info(`Email: ${email}`);
-          console.info(`Pronouns: ${pronouns}`);
-          console.info(`URL: ${url}`);
+        case CONFIGURE_COMMAND.name.toLowerCase():
+          const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
+          const channelId = message.data.components[0].components[0].value;
 
-          // const validEmail = EmailValidator.validate(email);
           fetch(url, {
             method: 'POST',
             body: JSON.stringify({
-              botToken: process.env.DISCORD_TOKEN,
-              interactionId: message.id,
-              interactionToken: message.token,
-              id: message.member.user.id,
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-              pronouns: pronouns,
+              channelId: channelId
             }),
           });
           return send(200, loadingMessage());
-      }
     }
-  } else {
-    return send(405, 'Method not allowed');
+
+  if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
+    // Handle modal responses
+    console.info(message);
+    console.info(message.data.components[0]);
+    const url = `${process.env.DEPLOYMENT_URL}/api/createUser`;
+    const firstName = message.data.components[0].components[0].value;
+    const lastName = message.data.components[1].components[0].value;
+    const email = message.data.components[2].components[0].value;
+    const pronouns = message.data.components[3].components[0].value;
+    console.info(`First Name: ${firstName}`);
+    console.info(`Last Name: ${lastName}`);
+    console.info(`Email: ${email}`);
+    console.info(`Pronouns: ${pronouns}`);
+    console.info(`URL: ${url}`);
+
+    // const validEmail = EmailValidator.validate(email);
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        botToken: process.env.DISCORD_TOKEN,
+        interactionId: message.id,
+        interactionToken: message.token,
+        id: message.member.user.id,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+        pronouns: pronouns,
+      }),
+    });
+    return send(200, loadingMessage());
   }
+
+  return send(405, 'Method not allowed');
 }
 
 function send(statusCode: number, body: Object) {
