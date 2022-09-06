@@ -1,5 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Client, TextChannel } from "discord.js";
-import { APIActionRowComponent, APIMessageActionRowComponent, APITextInputComponent, GatewayIntentBits } from 'discord-api-types/v10';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Client, GatewayIntentBits, TextChannel } from "discord.js";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function name(req: NextApiRequest, res: NextApiResponse) {
@@ -22,9 +21,11 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
     );
   
   console.debug('Send button');
-
-  let test = await (client.channels.cache.get(channelId) as TextChannel)
-    .send({ content: 'Click here!', components: [button] });
+  
+  await client.guilds.fetch();
+  const channel = client.channels.cache.get(channelId) as TextChannel;
+  
+  let test = await channel.send({ content: 'Click here!', components: [button] });
 
   console.debug(test);
 
