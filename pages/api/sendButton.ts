@@ -14,7 +14,7 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
   const button = new ActionRowBuilder<ButtonBuilder>()
 			.addComponents(
 				new ButtonBuilder()
-          .setCustomId('registerButton')
+          .setCustomId('registration_modal')
           .setLabel('Register')
           .setEmoji('✅')
           .setStyle(ButtonStyle.Primary),

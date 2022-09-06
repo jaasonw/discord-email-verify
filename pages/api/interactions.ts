@@ -38,7 +38,7 @@ export default async function handler(req: NextRequest) {
     return new Response('Bad request signature', { status: 401 });
   }
   const message = JSON.parse(await req.text());
-  console.log(message);
+  console.debug(`the fucking enum is : ${message.type}`);
   // ACK pings from Discord
   if (message.type === InteractionType.PING) {
     console.log('Handling Ping request');
@@ -47,10 +47,8 @@ export default async function handler(req: NextRequest) {
     });
   }
   
-  if (message.type == InteractionType.APPLICATION_COMMAND) {
-    switch (message.data.name.toLowerCase()) {
-      case REGISTER_COMMAND.name.toLowerCase():
-        console.log('Handling register command');
+  if (message.type == InteractionType.MESSAGE_COMPONENT) {
+    console.log('Handling register command');
         return send(
           200,
           new ModalBuilder()
@@ -92,18 +90,20 @@ export default async function handler(req: NextRequest) {
                 .setRequired(false)
             )
         );
-      case CONFIGURE_COMMAND.name.toLowerCase():
-        const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
-        const channelId = message.data.options[0].value;
+  }
 
-        fetch(url, {
-          method: 'POST',
-          body: JSON.stringify({
-            channelId: channelId
-          }),
-        });
-        return send(200, loadingMessage());
-    }
+  if (message.type == InteractionType.APPLICATION_COMMAND) {
+    const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
+    const channelId = message.data.options[0].value;
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        channelId: channelId
+      }),
+    });
+
+    return send(200, loadingMessage());
   }
 
   if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
