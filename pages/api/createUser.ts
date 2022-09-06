@@ -52,9 +52,9 @@ export default async function handler(
     },
   });
   if (userExists) {
-    const message = `Discord user with ID: ${id} appears to already be\
-    registered, check your email for a verification link or contact an\
-    administrator if you believe this is a mistake`;
+    const message = `Discord user with ID: ${id} appears to already be ` +
+    'registered, check your email for a verification link or contact an ' +
+    'administrator if you believe this is a mistake';
     await logAndRespond(token, message);
     return res.status(400).json({ status: `Bad Request` });
   }
@@ -68,9 +68,9 @@ export default async function handler(
     },
   });
   if (emailExists) {
-    const message = `Email: ${email} appears to be already registered, check\
-    your email for a verification link or contact an administrator if you\
-    believe this is a mistake`;
+    const message = `Email: ${email} appears to be already registered, check ` +
+    'your email for a verification link or contact an administrator if you ' +
+    'believe this is a mistake';
     const debug = `Email ${email} is currently mapped to ${emailExists.id}`;
     await logAndRespond(token, message, debug);
     return res.status(400).json({ status: `Bad Request` });
@@ -82,8 +82,8 @@ export default async function handler(
   const fullName = `${firstName} ${lastName} ${pronouns}`;
   const filter = new Filter();
   if (filter.clean(fullName) != fullName) {
-    const message = `Profanity isnt allowed in your name,\
-    contact an administrator if you believe this is a mistake`;
+    const message = 'Profanity isnt allowed in your name, ' +
+    'contact an administrator if you believe this is a mistake';
     const debug = `Profanity detected in: ${fullName}`;
     await logAndRespond(token, message, debug);
     return res.status(400).json({ status: `Bad Request` });
@@ -106,9 +106,9 @@ export default async function handler(
   });
   console.debug('User created');
 
-  const message = `I've sent an email to ${email} with a verification link.\
-  It doesn't expire but it can only be used once. Check your email to\
-  complete the verification process!`;
+  const message = `I've sent an email to ${email} with a verification link. ` +
+  'It doesn\'t expire but it can only be used once. Check your email to ' +
+  'complete the verification process!';
   const link = `${process.env.DEPLOYMENT_URL}/verify?code=${verificationCode}`;
   await sendVerificationEmail(email, link);
   await sendResponse(token, message);

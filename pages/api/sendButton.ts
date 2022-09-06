@@ -20,14 +20,9 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
           .setStyle(ButtonStyle.Primary),
     );
   
-  console.debug('Send button');
-  
   await client.guilds.fetch();
   const channel = client.channels.cache.get(channelId) as TextChannel;
-  
-  let test = await channel.send({ content: 'Click here!', components: [button] });
+  let message = await channel.send({ content: 'Click here!', components: [button] });
 
-  console.debug(test);
-
-  res.status(200).json({ status: test });
+  res.status(200).json({ status: message });
 }

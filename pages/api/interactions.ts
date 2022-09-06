@@ -38,7 +38,7 @@ export default async function handler(req: NextRequest) {
     return new Response('Bad request signature', { status: 401 });
   }
   const message = JSON.parse(await req.text());
-  console.debug(`the fucking enum is : ${message.type}`);
+  console.log(message);
   // ACK pings from Discord
   if (message.type === InteractionType.PING) {
     console.log('Handling Ping request');
