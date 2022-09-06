@@ -24,8 +24,10 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
   
   console.debug('Send button');
 
-  let test = (client.channels.cache.get(channelId) as TextChannel)
+  let test = await (client.channels.cache.get(channelId) as TextChannel)
     .send({ content: 'Click here!', components: [button] });
 
-  res.status(200).json({ status: 'OK' });
+  console.debug(test);
+
+  res.status(200).json({ status: test });
 }
