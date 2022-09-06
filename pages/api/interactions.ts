@@ -94,7 +94,7 @@ export default async function handler(req: NextRequest) {
         );
       case CONFIGURE_COMMAND.name.toLowerCase():
         const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
-        const channelId = message.data.components[0].components[0].value;
+        const channelId = message.data.options[0].value;
 
         fetch(url, {
           method: 'POST',
