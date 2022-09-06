@@ -10,6 +10,8 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
   const client = new Client({ intents: [GatewayIntentBits.Guilds] });
   await client.login(process.env.BOT_TOKEN);
 
+  console.debug('Creating button');
+
   const button = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -20,6 +22,8 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
     )
     .data as APIActionRowComponent<APIMessageActionRowComponent>;
   
+  console.debug('Send button');
+
   let test = (client.channels.cache.get(channelId) as TextChannel)
     .send({ content: 'Click here!', components: [button] });
 
