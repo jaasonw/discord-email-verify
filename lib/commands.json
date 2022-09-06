@@ -12,6 +12,12 @@
         "description": "The channel the bot accepts commands in",
         "type": 7,
         "required": true
+      },
+      {
+        "name": "message",
+        "description": "The message to be included with the button",
+        "type": 3,
+        "required": false
       }
     ]
   }
