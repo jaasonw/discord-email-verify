@@ -22,7 +22,7 @@ export default async function handler(req: NextRequest) {
   if (req.method !== 'POST') {
     return send(405, 'Method not allowed');
   }
-  
+
   const signature = req.headers.get('x-signature-ed25519') ?? '';
   const timestamp = req.headers.get('x-signature-timestamp') ?? '';
   const body = await req.clone().arrayBuffer();
@@ -46,60 +46,62 @@ export default async function handler(req: NextRequest) {
       type: InteractionResponseType.PONG,
     });
   }
-  
+
   if (message.type == InteractionType.MESSAGE_COMPONENT) {
     console.log('Handling register command');
-        return send(
-          200,
-          new ModalBuilder()
-            .setCustomId('registration_modal')
-            .setTitle('Register for access to the server!')
-            .addComponent(
-              new TextInputBuilder()
-                .setCustomId('first_name')
-                .setLabel('First Name')
-                .setMinLength(2)
-                .setMaxLength(32)
-                .setPlaceholder('frank')
-                .setRequired(true)
-            )
-            .addComponent(
-              new TextInputBuilder()
-                .setCustomId('last_name')
-                .setLabel('Last Name')
-                .setMinLength(2)
-                .setMaxLength(32)
-                .setPlaceholder('Bot')
-                .setRequired(true)
-            )
-            .addComponent(
-              new TextInputBuilder()
-                .setCustomId('email')
-                .setLabel('CSUF Email')
-                .setMinLength(2)
-                .setMaxLength(320)
-                .setPlaceholder('frankBot@csu.fullerton.edu')
-                .setRequired(true)
-            )
-            .addComponent(
-              new TextInputBuilder()
-                .setCustomId('pronouns')
-                .setLabel('Preferred Pronouns')
-                .setMinLength(2)
-                .setPlaceholder('He/Him, She/Her, They/Them, etc')
-                .setRequired(false)
-            )
-        );
+    return send(
+      200,
+      new ModalBuilder()
+        .setCustomId('registration_modal')
+        .setTitle('Register for access to the server!')
+        .addComponent(
+          new TextInputBuilder()
+            .setCustomId('first_name')
+            .setLabel('First Name')
+            .setMinLength(2)
+            .setMaxLength(32)
+            .setPlaceholder('frank')
+            .setRequired(true)
+        )
+        .addComponent(
+          new TextInputBuilder()
+            .setCustomId('last_name')
+            .setLabel('Last Name')
+            .setMinLength(2)
+            .setMaxLength(32)
+            .setPlaceholder('Bot')
+            .setRequired(true)
+        )
+        .addComponent(
+          new TextInputBuilder()
+            .setCustomId('email')
+            .setLabel('CSUF Email')
+            .setMinLength(2)
+            .setMaxLength(320)
+            .setPlaceholder('frankBot@csu.fullerton.edu')
+            .setRequired(true)
+        )
+        .addComponent(
+          new TextInputBuilder()
+            .setCustomId('pronouns')
+            .setLabel('Preferred Pronouns (Optional)')
+            .setMinLength(2)
+            .setPlaceholder('He/Him, She/Her, They/Them, etc')
+            .setRequired(false)
+        )
+    );
   }
 
   if (message.type == InteractionType.APPLICATION_COMMAND) {
     const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
     const channelId = message.data.options[0].value;
+    const buttonMessage = message.data.options[1].value;
 
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
-        channelId: channelId
+        channelId: channelId,
+        message: buttonMessage,
       }),
     });
 
@@ -136,7 +138,7 @@ export default async function handler(req: NextRequest) {
         pronouns: pronouns,
       }),
     });
-    return send(200, loadingMessage());
+    return send(200, ephemeralMessageReply('Creating button'));
   }
 
   return send(400, 'Invalid request');
