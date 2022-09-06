@@ -12,15 +12,14 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
 
   console.debug('Creating button');
 
-  const button = new ActionRowBuilder()
+  const button = new ActionRowBuilder<ButtonBuilder>()
 			.addComponents(
 				new ButtonBuilder()
-        .setCustomId('registerButton')
-        .setLabel('Register')
-        .setEmoji('✅')
-        .setStyle(ButtonStyle.Primary),
-    )
-    .data as APIActionRowComponent<APIMessageActionRowComponent>;
+          .setCustomId('registerButton')
+          .setLabel('Register')
+          .setEmoji('✅')
+          .setStyle(ButtonStyle.Primary),
+    );
   
   console.debug('Send button');
 
