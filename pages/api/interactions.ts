@@ -100,42 +100,45 @@ export default async function handler(req: NextRequest) {
             }),
           });
           return send(200, loadingMessage());
+      }
     }
 
-  if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
-    // Handle modal responses
-    console.info(message);
-    console.info(message.data.components[0]);
-    const url = `${process.env.DEPLOYMENT_URL}/api/createUser`;
-    const firstName = message.data.components[0].components[0].value;
-    const lastName = message.data.components[1].components[0].value;
-    const email = message.data.components[2].components[0].value;
-    const pronouns = message.data.components[3].components[0].value;
-    console.info(`First Name: ${firstName}`);
-    console.info(`Last Name: ${lastName}`);
-    console.info(`Email: ${email}`);
-    console.info(`Pronouns: ${pronouns}`);
-    console.info(`URL: ${url}`);
+    if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
+      // Handle modal responses
+      console.info(message);
+      console.info(message.data.components[0]);
+      const url = `${process.env.DEPLOYMENT_URL}/api/createUser`;
+      const firstName = message.data.components[0].components[0].value;
+      const lastName = message.data.components[1].components[0].value;
+      const email = message.data.components[2].components[0].value;
+      const pronouns = message.data.components[3].components[0].value;
+      console.info(`First Name: ${firstName}`);
+      console.info(`Last Name: ${lastName}`);
+      console.info(`Email: ${email}`);
+      console.info(`Pronouns: ${pronouns}`);
+      console.info(`URL: ${url}`);
 
-    // const validEmail = EmailValidator.validate(email);
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        botToken: process.env.DISCORD_TOKEN,
-        interactionId: message.id,
-        interactionToken: message.token,
-        id: message.member.user.id,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-        pronouns: pronouns,
-      }),
-    });
-    return send(200, loadingMessage());
+      // const validEmail = EmailValidator.validate(email);
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          botToken: process.env.DISCORD_TOKEN,
+          interactionId: message.id,
+          interactionToken: message.token,
+          id: message.member.user.id,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+          pronouns: pronouns,
+        }),
+      });
+      return send(200, loadingMessage());
+    
+    }
+  } else {
+    return send(405, 'Method not allowed');
   }
-
-  return send(405, 'Method not allowed');
 }
 
 function send(statusCode: number, body: Object) {
