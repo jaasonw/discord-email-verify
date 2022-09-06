@@ -2,5 +2,17 @@
   {
     "name": "register",
     "description": "Get a registration link to register for the club"
+  },
+  {
+    "name": "configure",
+    "description": "Configure what channels the bot accepts commands in",
+    "options": [
+      {
+        "name": "channel",
+        "description": "The channel the bot accepts commands in",
+        "type": 7,
+        "required": true
+      }
+    ]
   }
 ]
