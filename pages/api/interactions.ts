@@ -138,7 +138,7 @@ export default async function handler(req: NextRequest) {
         pronouns: pronouns,
       }),
     });
-    return send(200, ephemeralMessageReply('Creating button'));
+    return send(200, loadingMessage());
   }
 
   return send(400, 'Invalid request');
