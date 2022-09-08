@@ -2,9 +2,9 @@ name: Ping the database every 24 hours to prevent it from sleeping
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
 jobs:
-  build:
+  ping:
     name: Ping database
     runs-on: ubuntu-latest
     steps:
