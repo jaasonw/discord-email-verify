@@ -1,4 +1,3 @@
-# .github/workflows/scheduled-builds.yml
 name: Ping the database every 24 hours to prevent it from sleeping
 
 on:
