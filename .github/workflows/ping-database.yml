@@ -1,0 +1,13 @@
+# .github/workflows/scheduled-builds.yml
+name: Ping the database every 24 hours to prevent it from sleeping
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  build:
+    name: Ping database
+    runs-on: ubuntu-latest
+    steps:
+      - name: cURL request
+        run: curl https://acm-registration.netlify.app/api/ping
