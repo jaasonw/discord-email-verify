@@ -3,7 +3,6 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { ButtonBuilder } from 'discord.js';
 import { NextRequest } from 'next/server';
 import { ephemeralMessageReply, loadingMessage } from '../../lib/message';
 import { ModalBuilder, TextInputBuilder } from '../../lib/modal';
@@ -95,11 +94,12 @@ export default async function handler(req: NextRequest) {
   if (message.type == InteractionType.APPLICATION_COMMAND) {
     const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
     const channelId = message.data.options[0].value;
-    const buttonMessage = message.data.options[1].value;
+    const buttonMessage = message.data.options[1]?.value ?? '';
 
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
+        botToken: process.env.DISCORD_TOKEN,
         channelId: channelId,
         message: buttonMessage,
       }),
