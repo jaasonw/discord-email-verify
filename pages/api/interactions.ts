@@ -4,7 +4,7 @@ import {
   verifyKey,
 } from 'discord-interactions';
 import { NextRequest } from 'next/server';
-import { ephemeralMessageReply } from '../../lib/message';
+import { ephemeralMessageReply, loadingMessage } from '../../lib/message';
 import { ModalBuilder, TextInputBuilder } from '../../lib/modal';
 
 const REGISTER_COMMAND = {
@@ -105,7 +105,7 @@ export default async function handler(req: NextRequest) {
       }),
     });
 
-    return send(200, ephemeralMessageReply('Sent register button'));
+    return send(200, loadingMessage());
   }
 
   if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
