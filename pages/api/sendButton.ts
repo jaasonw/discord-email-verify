@@ -20,7 +20,6 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
 
   const channelId = body['channelId'].trim();
   const buttonMessage = body['message']?.trim() ?? '';
-
   const client = new Client({ intents: [GatewayIntentBits.Guilds] });
   await client.login(process.env.BOT_TOKEN);
 
