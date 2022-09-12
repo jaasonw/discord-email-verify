@@ -1,4 +1,4 @@
-name: Ping the database every 24 hours to prevent it from sleeping
+name: Ping the database every hour to prevent it from sleeping
 
 on:
   schedule:
