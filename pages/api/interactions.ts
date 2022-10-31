@@ -26,16 +26,19 @@ export default async function handler(req: NextRequest) {
   const timestamp = req.headers.get('x-signature-timestamp') ?? '';
   const body = await req.clone().arrayBuffer();
   console.log(body);
+
   const isValidRequest = verifyKey(
     body,
     signature,
     timestamp,
     process.env.DISCORD_TOKEN ?? ''
   );
+
   if (!isValidRequest) {
     console.error('Bad request signature');
     return new Response('Bad request signature', { status: 401 });
   }
+
   const message = JSON.parse(await req.text());
   console.log(message);
   // ACK pings from Discord
@@ -48,96 +51,18 @@ export default async function handler(req: NextRequest) {
 
   if (message.type == InteractionType.MESSAGE_COMPONENT) {
     console.log('Handling register command');
-    return send(
-      200,
-      new ModalBuilder()
-        .setCustomId('registration_modal')
-        .setTitle('Register for access to the server!')
-        .addComponent(
-          new TextInputBuilder()
-            .setCustomId('first_name')
-            .setLabel('First Name')
-            .setMinLength(2)
-            .setMaxLength(32)
-            .setPlaceholder('frank')
-            .setRequired(true)
-        )
-        .addComponent(
-          new TextInputBuilder()
-            .setCustomId('last_name')
-            .setLabel('Last Name')
-            .setMinLength(2)
-            .setMaxLength(32)
-            .setPlaceholder('Bot')
-            .setRequired(true)
-        )
-        .addComponent(
-          new TextInputBuilder()
-            .setCustomId('email')
-            .setLabel('CSUF Email')
-            .setMinLength(2)
-            .setMaxLength(320)
-            .setPlaceholder('frankBot@csu.fullerton.edu')
-            .setRequired(true)
-        )
-        .addComponent(
-          new TextInputBuilder()
-            .setCustomId('pronouns')
-            .setLabel('Preferred Pronouns (Optional)')
-            .setMinLength(2)
-            .setPlaceholder('He/Him, She/Her, They/Them, etc')
-            .setRequired(false)
-        )
-    );
+    return send(200, constructRegisterModal());
   }
 
   if (message.type == InteractionType.APPLICATION_COMMAND) {
-    const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
-    const channelId = message.data.options[0].value;
-    const buttonMessage = message.data.options[1]?.value ?? '';
-
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        botToken: process.env.DISCORD_TOKEN,
-        channelId: channelId,
-        message: buttonMessage,
-      }),
-    });
+    await sendButtonLogic(message);
 
     return send(200, loadingMessage());
   }
 
   if (message.type == InteractionType.APPLICATION_MODAL_SUBMIT) {
-    // Handle modal responses
-    console.info(message);
-    console.info(message.data.components[0]);
-    const url = `${process.env.DEPLOYMENT_URL}/api/createUser`;
-    const firstName = message.data.components[0].components[0].value;
-    const lastName = message.data.components[1].components[0].value;
-    const email = message.data.components[2].components[0].value;
-    const pronouns = message.data.components[3].components[0].value;
-    console.info(`First Name: ${firstName}`);
-    console.info(`Last Name: ${lastName}`);
-    console.info(`Email: ${email}`);
-    console.info(`Pronouns: ${pronouns}`);
-    console.info(`URL: ${url}`);
+    await handleModalResponse(message);
 
-    // const validEmail = EmailValidator.validate(email);
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        botToken: process.env.DISCORD_TOKEN,
-        interactionId: message.id,
-        interactionToken: message.token,
-        id: message.member.user.id,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
-        pronouns: pronouns,
-      }),
-    });
     return send(200, loadingMessage());
   }
 
@@ -150,6 +75,94 @@ function send(statusCode: number, body: Object) {
     headers: {
       'content-type': 'application/json',
     },
+  });
+}
+
+function constructRegisterModal(): ModalBuilder {
+  return new ModalBuilder()
+    .setCustomId('registration_modal')
+    .setTitle('Register for access to the server!')
+    .addComponent(
+      new TextInputBuilder()
+        .setCustomId('first_name')
+        .setLabel('First Name')
+        .setMinLength(2)
+        .setMaxLength(32)
+        .setPlaceholder('frank')
+        .setRequired(true)
+    )
+    .addComponent(
+      new TextInputBuilder()
+        .setCustomId('last_name')
+        .setLabel('Last Name')
+        .setMinLength(2)
+        .setMaxLength(32)
+        .setPlaceholder('Bot')
+        .setRequired(true)
+    )
+    .addComponent(
+      new TextInputBuilder()
+        .setCustomId('email')
+        .setLabel('CSUF Email')
+        .setMinLength(2)
+        .setMaxLength(320)
+        .setPlaceholder('frankBot@csu.fullerton.edu')
+        .setRequired(true)
+    )
+    .addComponent(
+      new TextInputBuilder()
+        .setCustomId('pronouns')
+        .setLabel('Preferred Pronouns (Optional)')
+        .setMinLength(2)
+        .setPlaceholder('He/Him, She/Her, They/Them, etc')
+        .setRequired(false)
+    );
+}
+
+async function sendButtonLogic(message: any): Promise<void> {
+  const url = `${process.env.DEPLOYMENT_URL}/api/sendButton`;
+  const channelId = message.data.options[0].value;
+  const buttonMessage = message.data.options[1]?.value ?? '';
+
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      botToken: process.env.DISCORD_TOKEN,
+      channelId: channelId,
+      message: buttonMessage,
+    }),
+  });
+}
+
+async function handleModalResponse(message: any): Promise<void> {
+  console.info(message);
+  console.info(message.data.components[0]);
+
+  const url = `${process.env.DEPLOYMENT_URL}/api/createUser`.trim();
+  const firstName = message.data.components[0].components[0].value.trim();
+  const lastName = message.data.components[1].components[0].value.trim();
+  const email = message.data.components[2].components[0].value.trim();
+  const pronouns = message.data.components[3].components[0].value.trim();
+
+  console.info(`First Name: ${firstName}`);
+  console.info(`Last Name: ${lastName}`);
+  console.info(`Email: ${email}`);
+  console.info(`Pronouns: ${pronouns}`);
+  console.info(`URL: ${url}`);
+
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      botToken: process.env.DISCORD_TOKEN,
+      interactionId: message.id,
+      interactionToken: message.token,
+      id: message.member.user.id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      discordUser: `${message.member.user.username}#${message.member.user.discriminator}`,
+      pronouns: pronouns,
+    }),
   });
 }
 

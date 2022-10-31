@@ -9,12 +9,14 @@ type layoutProps = {
 };
 
 export const BannerLayout: React.FC<layoutProps> = (props) => {
-  const {children} = props;
+  const { children } = props;
   const [isDesktop] = useResponsive();
 
   return (
     <section
-      className={`flex ${!isDesktop && 'flex-col'} bg-acm-canvas p-4 rounded-xl justify-center items-center md:p-8`}
+      className={`flex ${
+        !isDesktop && 'flex-col'
+      } bg-acm-canvas p-4 rounded-xl justify-center items-center md:p-8`}
     >
       {children}
     </section>
@@ -26,7 +28,7 @@ type imageProps = {
 };
 
 export const BannerImage: React.FC<imageProps> = (props) => {
-  const {src} = props;
+  const { src } = props;
   return (
     <div>
       <Image src={src} objectFit="cover" width={129} height={92} alt={src} />
@@ -40,7 +42,7 @@ type contentProps = {
 };
 
 export const BannerContent: React.FC<contentProps> = (props) => {
-  const {success, header} = props;
+  const { success, header } = props;
   return (
     <div className="flex flex-col items-center md:ml-[2rem] text-center ml-[1rem]">
       {success ? (
@@ -74,7 +76,7 @@ type headerProps = {
 };
 
 export const BannerHeader: React.FC<headerProps> = (props) => {
-  const {header, success} = props;
+  const { header, success } = props;
   return (
     <>
       {success ? (
@@ -99,7 +101,7 @@ export const BannerButton = () => {
 };
 
 export const ErrorMessage: React.FC = () => {
-  const {query} = useRouter();
+  const { query } = useRouter();
   return (
     <div className="flex flex-col justify-center items-center">
       <p className="text-[1.25rem]">Error Code</p>
