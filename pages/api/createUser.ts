@@ -33,8 +33,7 @@ export default async function handler(
   const email = body['email'].trim();
   const discordUser = body['discordUser'].trim();
   const pronouns = body['pronouns'].trim();
-
-  const token = body['interactionToken'];
+  const token = body['interactionToken'].trim();
 
   // Valid email check
   console.debug('Checking email validity');

@@ -34,10 +34,13 @@ export default async function handler(
     const guild = await discord.guilds.fetch(process.env.GUILD_ID ?? '');
     const role = await guild.roles.fetch(process.env.VERIFICATION_ROLE ?? '');
     const member = await guild.members.fetch(user?.id ?? '');
+
     // check if user already has role
-    if (role) {
-      if (member.roles.cache.some((role) => role.id == process.env.GUILD_ID))
-        await member.roles.add(role);
+    if (
+      role &&
+      member.roles.cache.some((role) => role.id == process.env.GUILD_ID)
+    ) {
+      await member.roles.add(role);
     }
     const nickName = makeNickname(user.firstName, user.lastName, user.pronouns);
     await member.setNickname(nickName);
@@ -45,12 +48,15 @@ export default async function handler(
     console.error(`Failed to verify UUID: ${req.query['verificationCode']}`);
     console.error(`Error: ${JSON.stringify(error)}`);
     console.debug(`Request query: ${JSON.stringify(req.query)}`);
+
     let base64 = Buffer.from(
       JSON.stringify({ query: req.query, error: error })
     ).toString('base64');
+
     return res.redirect(`/error?code=${base64}`);
   } finally {
     discord.destroy();
   }
+
   return res.redirect('/success');
 }
